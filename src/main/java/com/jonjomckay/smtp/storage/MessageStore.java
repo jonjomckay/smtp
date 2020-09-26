@@ -1,5 +1,8 @@
 package com.jonjomckay.smtp.storage;
 
-public interface MessageStore {
+import javax.mail.internet.MimeMessage;
 
+public interface MessageStore {
+    boolean doesMailboxExist(String address);
+    void store(String address, MimeMessage message);
 }

@@ -1,10 +1,12 @@
 package com.jonjomckay.smtp;
 
 import com.jonjomckay.smtp.storage.MessageStore;
+import com.sun.mail.smtp.SMTPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.ByteArrayInputStream;
 import java.net.InetAddress;
@@ -18,7 +20,6 @@ import java.util.concurrent.atomic.AtomicLong;
 public class SmtpSession {
     private final static Logger LOGGER = LoggerFactory.getLogger(SmtpSession.class);
 
-    private static AtomicLong counter = new AtomicLong(0);
 
     private String from;
     private StringBuilder data = new StringBuilder();
@@ -51,28 +52,22 @@ public class SmtpSession {
     public void store() {
         // TODO: Can I use UTF-8?
         try {
-            MimeMessage mimeMessage = new MimeMessage(null, new ByteArrayInputStream(data.toString().getBytes(StandardCharsets.UTF_8)));
-            
-            for (var recipient : recipients) {
+            SMTPMessage smtpMessage = new SMTPMessage(null, new ByteArrayInputStream(data.toString().getBytes(StandardCharsets.UTF_8)));
+
+            for (var address : smtpMessage.getAllRecipients()) {
+                var recipient = (InternetAddress) address;
+                if (recipient == null) {
+                    continue;
+                }
+
                 // TODO: Check if recipient exists, and queue failure message back if it doesn't (async?)
-
-                var now = OffsetDateTime.now();
-
-                var filename = String.format("%d.M%dP%d_%d.%s",
-                        now.toEpochSecond(),
-                        now.getNano() / 1000,
-                        ProcessHandle.current().pid(),
-                        counter.incrementAndGet(),
-                        InetAddress.getLocalHost().getHostName()
-                );
-
-                LOGGER.debug("{}: {}", recipient, filename);
+                if (messageStore.doesMailboxExist(recipient.getAddress())) {
+                    messageStore.store(recipient.getAddress(), smtpMessage);
+                } else {
+                    LOGGER.warn("Received a message for {}, but that mailbox does not exist", recipient.getAddress());
+                }
             }
-
-            int i = 0;
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
     }

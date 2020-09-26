@@ -9,6 +9,7 @@ import io.vertx.core.net.NetServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Application {
@@ -29,7 +30,7 @@ public class Application {
                         LOGGER.error("Unhandled exception", e);
                     });
 
-                    var messageStore = new MaildirMessageStore(null);
+                    var messageStore = new MaildirMessageStore(new File("/home/jonjo/tmp/maildir"));
                     var smtpSession = new SmtpSession(messageStore);
                     var smtpHandler = new SmtpHandler(socket);
                     var dataCommand = new AtomicBoolean(false);
