@@ -1,7 +1,7 @@
-package com.jonjomckay.smtp.handlers;
+package com.jonjomckay.mail.smtp.handlers;
 
-import com.jonjomckay.smtp.Response;
-import com.jonjomckay.smtp.SmtpSession;
+import com.jonjomckay.mail.smtp.SmtpResponse;
+import com.jonjomckay.mail.smtp.SmtpSession;
 
 public class RcptHandler implements Handler {
     private final SmtpSession session;
@@ -11,9 +11,9 @@ public class RcptHandler implements Handler {
     }
 
     @Override
-    public Response handle(String message) {
+    public SmtpResponse handle(String message) {
         this.session.addRecipient(message);
 
-        return new Response(250, "OK");
+        return new SmtpResponse(250, "OK");
     }
 }

@@ -1,6 +1,6 @@
-package com.jonjomckay.smtp.storage;
+package com.jonjomckay.mail.smtp.storage;
 
-import com.jonjomckay.smtp.SmtpSession;
+import com.jonjomckay.mail.smtp.SmtpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

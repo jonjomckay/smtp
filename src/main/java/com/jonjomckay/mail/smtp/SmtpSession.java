@@ -1,21 +1,16 @@
-package com.jonjomckay.smtp;
+package com.jonjomckay.mail.smtp;
 
-import com.jonjomckay.smtp.storage.MessageStore;
+import com.jonjomckay.mail.smtp.storage.MessageStore;
 import com.sun.mail.smtp.SMTPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.io.ByteArrayInputStream;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
-import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class SmtpSession {
     private final static Logger LOGGER = LoggerFactory.getLogger(SmtpSession.class);

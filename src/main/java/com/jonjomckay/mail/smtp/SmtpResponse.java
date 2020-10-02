@@ -1,10 +1,10 @@
-package com.jonjomckay.smtp;
+package com.jonjomckay.mail.smtp;
 
-public class Response {
+public class SmtpResponse {
     private int code;
     private String message;
 
-    public Response(int code, String message) {
+    public SmtpResponse(int code, String message) {
         this.code = code;
         this.message = message;
     }

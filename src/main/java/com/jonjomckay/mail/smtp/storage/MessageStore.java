@@ -1,4 +1,4 @@
-package com.jonjomckay.smtp.storage;
+package com.jonjomckay.mail.smtp.storage;
 
 import javax.mail.internet.MimeMessage;
 
